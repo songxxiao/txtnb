@@ -1,6 +1,6 @@
 fluidPage(
   titlePanel('朴素贝叶斯垃圾短信分类'),
-  helpText('本程序由',a('宋骁',href='https://xsong.ltd/',target='_blank'),'制作'),
+  helpText('本程序由',a('宋骁',href='https://xsong.ltd/',target='_blank'),'编写'),
   helpText('本程序使用5567条',a('英文短信',href='https://www.kaggle.com/team-ai/spam-text-message-classification',target='_blank'),'作为训练集生成朴素贝叶斯分类器。'),
   helpText('用户需要输入一段短信内容文本。下方将返回该文本的分类结果。'),
   helpText('由于训练文本为英文，请输入英文文本。'),
