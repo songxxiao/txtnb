@@ -13,7 +13,7 @@
 
 如:
 
-+ “Did you catch the bus ? Are you frying an egg ? Did you make a tea? Are you eating your mom's left over dinner ?（非垃圾短信）
++ Did you catch the bus ? Are you frying an egg ? Did you make a tea? Are you eating your mom's left over dinner ?（非垃圾短信）
 
 + We tried to call you re your reply to our sms for a free nokia mobile. Please call now 08000930705 for delivery tomorrow.（垃圾短信）
 
