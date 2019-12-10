@@ -1,8 +1,8 @@
 # txtnb
 
-+ A text classification shiny App using Naive Bayes
++ A text classification [Shiny App](https://shiny.rstudio.com/)  using Naive Bayes
 
-+ 朴素贝叶斯垃圾短信分类 Shiny App  
++ 朴素贝叶斯垃圾短信分类 [Shiny App](https://shiny.rstudio.com/) 
 
 本程序由[宋骁](https://xsong.ltd/)编写。  
 

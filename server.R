@@ -1,6 +1,3 @@
-#naiveBayes <- readRDS("D:/txtnb/naiveBayes.rds")
-
-
 function(input, output) {
   output$value <- renderText({
     library(tm)
