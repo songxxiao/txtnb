@@ -32,7 +32,8 @@
 ```
 library(shiny)
 runGitHub( "txtnb", "ECSTA7Y")
-
 ```
 
 即可下载和运行本App。
+
+后续我会将APP挂在网上
