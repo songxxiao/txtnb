@@ -1,10 +1,8 @@
-# txtnb
-
-+ A text classification [Shiny App](https://shiny.rstudio.com/)  using Naive Bayes
+# A text classification [Shiny App](https://shiny.rstudio.com/) Program
 
 + [English Version](https://github.com/ECSTA7Y/txtnb_en)
 
-+ 朴素贝叶斯垃圾短信分类 [Shiny App](https://shiny.rstudio.com/) 
++ 垃圾短信分类 [Shiny App](https://shiny.rstudio.com/) 
 
 本程序由[宋骁](https://xsong.ltd/)编写。  
 
@@ -23,7 +21,8 @@
 
 程序包支持：`tm`、`e1071`
 
-文件夹中的`naiveBayes.rds`为预先训练好的模型。
+文件夹中的`naiveBayes.rds`为预先训练好的朴素贝叶斯模型；
+`svmc.rds`为支持向量机模型；`naiveBayes.rds`为训练数据集。
 
 + 如何使用？
 
@@ -36,4 +35,4 @@ runGitHub( "txtnb", "ECSTA7Y")
 
 即可下载和运行本App。
 
-后续我会将APP挂在网上
+后续我会将APP挂在网上。
