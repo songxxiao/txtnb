@@ -1,0 +1,204 @@
+---
+title: '垃圾短信过滤程序'
+author:  
+date: '2019-12-25'
+slug: sms
+---
+
+模型训练
+
+```{r, include=F}
+knitr::opts_chunk$set(comment='#',error=T,message = F,warning = F,fig.align='center',out.width ='90%')
+```
+
+```{r}
+library(magrittr)
+library(quanteda)
+library(tidytext)
+library(dplyr)
+library(tm)
+library(readr)
+library(stringr)
+```
+
+```{r}
+sms = read_csv("E:/MaLearning/SPAM text message 20170820 - Data.csv")
+```
+
+```{r}
+#因变量比例
+sms %>% count(Category)
+#sms %$% prop.table(table(Category))[1]
+```
+
+
+数据概览如下，数据共2列，第1列为标签，第2列为文本内容：
+
+```{r}
+smswd = sms %>%
+  rename(message = Message,tag = Category) %>% 
+  mutate(ID = row_number())
+head(smswd)
+Y = as.factor(smswd$tag)
+```
+
+
+```{r,fig.cap='可以看出垃圾信息大量使用了call、free等营销相关的词语。而普通信息则更多是日常交流用语'}
+smswd$message = lapply(smswd$message , iconv, "UTF-8", "ASCII", sub="")
+```
+
+```{r}
+
+ms_corpus = VCorpus(VectorSource(smswd$message))
+
+sms_dtm = DocumentTermMatrix(ms_corpus, control =
+                                 list(tolower = T,
+                                      removeNumbers = T,
+                                      stopwords = T,
+                                      removePunctuation = T,
+                                      stemming = T))
+
+dim(sms_dtm) #5572
+
+sms_dtm1 = removeSparseTerms(sms_dtm, sparse = .98)
+sms_dtm2 = as.data.frame(as.matrix(sms_dtm1))
+treemt = cbind(sms_dtm2, Y)
+treemt = as.data.frame(treemt) # treemt用于决策树训练
+
+smsmat = as.matrix(sms_dtm1) # 训练数据集
+dim(smsmat)
+colnames(smsmat)
+```
+
+
+```{r model building}
+library(caret)
+library(e1071)
+
+# SVM
+svmc = svm(smsmat, Y)
+pred = predict(svmc,smsmat)
+conMatrix = confusionMatrix(pred,Y,
+                             positive ='spam',
+                             mode="prec_recall") 
+conMatrix[["table"]]
+
+# NaiveBayes
+nb = naiveBayes(smsmat, Y) 
+
+#setwd('F:/Mysite/Mysite/static/archives/Rbasic')
+#保留模型对象
+#saveRDS(nb, "naiveBayes.rds")
+#readRDS("naiveBayes.rds")
+#save(nb,"naiveBayes.RData")
+#load("naiveBayes.RData")
+
+pred1 = predict(nb,smsmat)
+conMatrix1 = confusionMatrix(pred1,Y,
+                              positive ='spam',
+                              mode="prec_recall") 
+#混淆矩阵
+conMatrix1[["table"]]
+#混淆矩阵
+prop.table(conMatrix1[["table"]],1)
+
+# RPART: Decision Tree
+library(rpart)
+treemt = treemt %>%
+  as.data.frame() %>% 
+  mutate(Y = as.factor(Y))
+rtree = rpart(Y~. , treemt)
+#saveRDS(rtree, "rtree.rds")
+pred2 = predict(rtree,treemt,type = 'class')
+head(as.data.frame(pred2))
+
+# Random Forest
+library(randomForest)
+rffit = randomForest(Y~. , treemt)
+#saveRDS(rffit, "rforest.rds")
+pred3 = predict(rffit,treemt,type = 'class')
+head(as.data.frame(pred3))
+
+# Logistic Regression
+rlog = glm(Y~. , treemt,family = binomial("logit"))
+#saveRDS(rlog, "logit.rds")
+pred4 = predict(rlog,treemt,type = "response")
+
+predlog = pred4 %>% as.data.frame(pred4)
+colnames(predlog)[1] = 'pred'
+
+predlog = predlog %>% 
+  mutate(predtag = ifelse(pred >0.5,'spam','ham'))
+head(predlog)
+
+
+
+```
+
+
+```{r}
+#2个新的短信字符串
+new = 'please go home at 4 o clock bro' #非垃圾短信
+
+new2 = 'We are trying to call you.Please call our customer service representative on FREEPHONE.Claim code S89. Valid 12hrs only' # 垃圾短信
+
+#对于新数据集。判断DTM的每一列是否在训练集中出现。
+#出现保留，没出现剔除，补充空列。
+convert_dtm = function(string){ # 得到新数据的DTM
+test_dtm = VCorpus(VectorSource(string)) %>% 
+  DocumentTermMatrix(., control = list(tolower = T,
+                                      removeNumbers = T,
+                                      stopwords = T,
+                                      removePunctuation = T,
+                                      stemming = T)) %>% 
+  as.matrix()
+
+smmat = smsmat[1,]  # smsmat 为训练集DTM,提取第一行
+smmat = as.data.frame(smmat) # 将matrix转化为data.frame
+smmat[,1] = 0 # 将此列所有值设为0
+smmat = t(smmat) # 转置
+sp = colnames(smmat) %in% colnames(test_dtm) # 判断新数据集在训练集中出现的列
+sp2 = colnames(test_dtm) %in% colnames(smmat)
+smmat[,sp] = test_dtm[,sp2]  # 提取在训练集中出现的列，将对应的值重编码为频率
+smmat = as.data.frame(smmat) 
+smmat$Y = 'xxx'
+return(smmat)
+}
+
+
+test_result = function(model,string){ # 得到新数据的预测结果
+  ms_corpus = VCorpus(VectorSource(string))
+test_dtm = DocumentTermMatrix(ms_corpus, control =
+                                 list(tolower = T,
+                                      removeNumbers = T,
+                                      stopwords = T,
+                                      removePunctuation = T,
+                                      stemming = T))
+test_dtm = as.matrix(test_dtm)
+
+smmat = smsmat[1,] 
+smmat = as.data.frame(smmat) 
+smmat[,1] = 0 
+smmat = t(smmat)
+sp = colnames(smmat) %in% colnames(test_dtm)
+sp2 = colnames(test_dtm) %in% colnames(smmat)
+smmat[,sp] = test_dtm[,sp2]
+result = predict(model,smmat)
+result = as.character(result)
+return(result)
+}
+
+
+#可以看出'call'的词频为2
+convert_dtm(new2)
+
+# 现在进行结果预测
+test_result(nb,new)
+test_result(nb,new2)
+test_result(svmc,new)
+test_result(svmc,new2)
+
+convert_dtm(new)
+#pred4 = predict(rlog,treemt,type = "response")
+```
+

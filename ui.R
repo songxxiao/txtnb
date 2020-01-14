@@ -1,16 +1,23 @@
+####################
+# Author: Song Xiao
+####################
+
 fluidPage(
   titlePanel('垃圾短信分类程序'),
   
   sidebarLayout(
     sidebarPanel(
-     selectInput("model",label = "选择一种模型",
+     selectInput("model",label = "选择一种分类器",
                             choices = c("朴素贝叶斯", 
                                         "支持向量机",
+                                        "CART决策树",
+                                        "随机森林",
+                                        "Logistic回归",
                                         " "),
-                            selected = " "),
+                            selected = " "), # default选项
      
-                helpText('目前支持朴素贝叶斯和支持向量机，未来可能会加入更多的算法。'),
-                helpText('R程序包支持：tm、e1071'),
+                helpText('目前支持朴素贝叶斯、支持向量机、CART决策树、随机森林和Logistic回归算法。'),
+                helpText('R程序包支持：tm、e1071、rpart、randomForest'),
                 textAreaInput("sms", 
                               '输入短信文本',
                               ' ', 
@@ -23,8 +30,8 @@ fluidPage(
                 uiOutput('resetable_input'),
                 actionButton('reset_input','重置')),
     mainPanel(
-      h4('作者：',a('宋骁',href='https://xsong.ltd/',target='_blank')),
-      h5('本程序使用5567条',a('英文短信',href='https://www.kaggle.com/team-ai/spam-text-message-classification',target='_blank'),'作为训练集'),
+      h4('作者：',a('宋骁',href='https://xsong.ltd/')),
+      h5('本程序使用5567条',a('英文短信',href='https://www.kaggle.com/team-ai/spam-text-message-classification'),'作为训练集'),
       h4('将下边的短信文本复制到左边,并选一个模型试试！'),
       p('Did you catch the bus ? Are you buying an egg ? Did you make a coffee? 
         Are you eating your mom\'s left over lunch ?'),
@@ -34,10 +41,5 @@ fluidPage(
       p('BangBabes Ur order is on the way. U SHOULD receive a Service Msg 2 download UR content. If U do not, GoTo wap. bangb. tv on UR mobile internet/service menu'),
       p('Attention! Adult 18 Content Your PXXN video will go with you quickly'))
     )
-  
-  
-  
-
-  
 )
 
