@@ -1,7 +1,7 @@
 # 短文本分类：垃圾信息判别 R Shiny App程序
 
-本程序的github地址：<https://github.com/ECSTA7Y/txtnb>   
-English Version：<https://github.com/ECSTA7Y/txtnb_en>
+本程序的github地址：<https://github.com/songxxiao/txtnb>   
+English Version：<https://github.com/songxxiao/txtnb_en>
 
 ## 简介
 
@@ -62,7 +62,7 @@ install.packages('tm')
 
 ```r
 library(shiny)
-runGitHub( "txtnb", "ECSTA7Y")
+runGitHub( "txtnb", "songxxiao")
 ```
 
 经测试，在Ubuntu 18.04中无法安装`tm`包，因此无法运行本App。欢迎使用Mac系统的小伙伴分享测试结果。本程序由[宋骁](https://xsong.ltd/)编写。这是我的第一个Shiny App编程尝试，同时也是一次短文本机器学习分类器的尝试。
