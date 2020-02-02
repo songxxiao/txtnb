@@ -2,6 +2,9 @@
 # Author: Song Xiao
 ####################
 
+library(shiny)
+
+shinyUI(
 fluidPage(
   uiOutput("tit"),
   radioButtons(inputId = "language", label = "Select a language/选择一种语言",
@@ -21,6 +24,7 @@ fluidPage(
                          placeholder = F),
       uiOutput('resetable_input'),
       actionButton('reset_input','Reset/重置')),
+    
     mainPanel(
       uiOutput('author'),
       uiOutput('mention'),
@@ -37,4 +41,4 @@ fluidPage(
       p('Attention! Adult 18 Content Your PXXN video will go with you quickly'))
   )
 )
-
+)

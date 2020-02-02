@@ -2,11 +2,12 @@
 # Author: Song Xiao
 ####################
 
-
+library(shiny)
 library(tm)
 library(e1071)
 library(rpart)
 library(randomForest)
+library(SnowballC)
 
 # load classifers
 naiveBayes = readRDS("./classifiers/naiveBayes.rds") # relative directory
@@ -15,16 +16,17 @@ rtree = readRDS("./classifiers/rtree.rds")
 rforest = readRDS("./classifiers/rforest.rds")
 logit = readRDS("./classifiers/logit.rds")
 # load training data columns
-train = readRDS("./data/train.rds")
+
 translation = readRDS("./data/translation.rds")
 
+source('functions.R')
+
+shinyServer(
 function(input, output, session) {
   tr = function(text){ # translates text into current language
     sapply(text,function(s) translation[[s]][[input$language]], USE.NAMES=F)
   }
-  
-  
-  
+
   output$tit = renderUI({ # from language input to get title translation, pass prameter to UI
     titlePanel(tr('title'))
   })
@@ -40,57 +42,7 @@ function(input, output, session) {
   output$value =  renderText({
     # define some functions
     
-    ## predict new string's class using machine learning
-    ## param @model a classification algorithm
-    ## param @string a message string to predict if it is a spam
-    ## return Prediction, spam or ham.
-    test_result = function(model,string){ # get result from a string
-      ms_corpus  = VCorpus(VectorSource(string))
-      test_dtm = DocumentTermMatrix(ms_corpus, control =
-                                      list(tolower = T,
-                                           removeNumbers = T,
-                                           stopwords = T,
-                                           removePunctuation = T,
-                                           stemming = T))
-      test_dtm = as.matrix(test_dtm)
-      
-      smmat = train[1,] 
-      smmat = as.data.frame(smmat) 
-      smmat[,1] = 0 
-      smmat = t(smmat)
-      sp = colnames(smmat) %in% colnames(test_dtm)
-      sp2 = colnames(test_dtm) %in% colnames(smmat)
-      smmat[,sp] = test_dtm[,sp2]
-      result = predict(model,smmat)
-      result = as.character(result)
-      return(result)
-    }
-    
-    ## get new string's DTM
-    ## but it will delete columns do not contained in training data.
-    ## param string: a message string to convert to DTM 
-    ## return a DTM just has one row
 
-    convert_dtm = function(string){ 
-      ms_corpus = VCorpus(VectorSource(string)) 
-      test_dtm = DocumentTermMatrix(ms_corpus, control = list(tolower = T,
-                                                              removeNumbers = T,
-                                                              stopwords = T,
-                                                              removePunctuation = T,
-                                                              stemming = T))
-      test_dtm = as.matrix(test_dtm)
-      
-      smmat = train[1,]   # smsmat is training data DTM, get first row
-      smmat = as.data.frame(smmat) # matrix --> data.frame
-      smmat[,1] = 0 # set this columns to 0
-      smmat = t(smmat) # transpose
-      sp = colnames(smmat) %in% colnames(test_dtm) # identify if new data columns appear on training data.列
-      sp2 = colnames(test_dtm) %in% colnames(smmat)
-      smmat[,sp] = test_dtm[,sp2] # get columns appear on training data, recode to frequency
-      smmat = as.data.frame(smmat) 
-      smmat$Y = 'xxx'
-      return(smmat)
-    }
     if (input$model == 'Naive Bayes'){
       result = test_result(naiveBayes,input$sms)
     }else if(input$model == 'Support Vector Machine'){
@@ -111,7 +63,7 @@ function(input, output, session) {
     }
     
     if (input$sms == ' ' | input$model == ' ' ){
-      sprintf(' ') #无输入时不显示结果
+      sprintf(' ') # No result if there is no input
     }else if(result == 'spam'){
       sprintf(tr('spam1'))
     }else{
@@ -120,7 +72,7 @@ function(input, output, session) {
     
   })
   
-  # 重置按钮
+  # Reset Button
   observeEvent(input$reset_input, { 
     updateSelectInput(session, 
                       "model",
@@ -168,3 +120,4 @@ function(input, output, session) {
   })
   
 }
+)

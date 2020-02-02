@@ -1,0 +1,12 @@
+name: spam_text
+title: spam_text
+username:
+account: xiaosong
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 1745878
+bundleId: 2769557
+url: https://xiaosong.shinyapps.io/spam_text/
+when: 1580660129.92075
+asMultiple: FALSE
+asStatic: FALSE

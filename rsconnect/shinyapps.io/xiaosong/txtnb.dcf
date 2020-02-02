@@ -1,10 +1,12 @@
 name: txtnb
-title:
+title: txtnb
 username:
 account: xiaosong
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
-appId: 1618555
-bundleId: 2690685
+appId: 1745875
+bundleId: 2768371
 url: https://xiaosong.shinyapps.io/txtnb/
-when: 1577269757.67509
+when: 1580573991.98917
+asMultiple: FALSE
+asStatic: FALSE
