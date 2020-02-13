@@ -1,6 +1,4 @@
-####################
 # Author: Song Xiao
-####################
 
 library(shiny)
 library(tm)
@@ -15,33 +13,27 @@ svmc = readRDS("./classifiers/svmc.rds")
 rtree = readRDS("./classifiers/rtree.rds")
 rforest = readRDS("./classifiers/rforest.rds")
 logit = readRDS("./classifiers/logit.rds")
-# load training data columns
-
-translation = readRDS("./data/translation.rds")
-
 source('functions.R')
+
 
 shinyServer(
 function(input, output, session) {
-  tr = function(text){ # translates text into current language
-    sapply(text,function(s) translation[[s]][[input$language]], USE.NAMES=F)
-  }
 
-  output$tit = renderUI({ # from language input to get title translation, pass prameter to UI
-    titlePanel(tr('title'))
+  # from language input to get title translation, pass prameter to UI
+  output$tit = renderUI({ 
+    titlePanel(tr('title',input))
   })
   
   output$sup= renderUI({
-    helpText(tr('support'))
+    helpText(tr('support',input))
   })
   
   output$pack= renderUI({
-    helpText(tr('package'))
+    helpText(tr('package',input))
   })
   
   output$value =  renderText({
     # define some functions
-    
 
     if (input$model == 'Naive Bayes'){
       result = test_result(naiveBayes,input$sms)
@@ -65,18 +57,17 @@ function(input, output, session) {
     if (input$sms == ' ' | input$model == ' ' ){
       sprintf(' ') # No result if there is no input
     }else if(result == 'spam'){
-      sprintf(tr('spam1'))
+      sprintf(tr('spam1',input))
     }else{
-      sprintf(tr('ham1'))
+      sprintf(tr('ham1',input))
     }
-    
-  })
+})
   
   # Reset Button
   observeEvent(input$reset_input, { 
     updateSelectInput(session, 
                       "model",
-                      label = tr("select:"),
+                      label = tr("select:",input),
                       choices = c("Naive Bayes", 
                                   "Support Vector Machine",
                                   "CART Decision Tree",
@@ -84,12 +75,12 @@ function(input, output, session) {
                                   "Logistic Regression",
                                   " "),
                       selected = " ")
-    updateTextAreaInput(session,"sms", tr('inpms'),' ')
+    updateTextAreaInput(session,"sms", tr('inpms',input),' ')
   })
   
   output$althmodels = renderUI({
     selectInput("model",
-                label = tr("select:"),
+                label = tr("select:",input),
                 choices = c("Naive Bayes", 
                             "Support Vector Machine",
                             "CART Decision Tree",
@@ -101,22 +92,21 @@ function(input, output, session) {
   
   output$txt = renderUI({
     textAreaInput("sms", 
-                  tr('inpms'), 
+                  tr('inpms',input), 
                   ' ',
-                  width = '335', 
                   height = '100')
   })
   
   output$author = renderUI({
-    h4(tr('author'),a(tr('xsong'),href='https://xsong.ltd/'))
+    h5(tr('author',input),a(tr('xsong',input),href='https://xsong.ltd/'))
   })
   
   output$mention = renderUI({
-    h5(tr('use'),a(tr('eng'),href='https://www.kaggle.com/team-ai/spam-text-message-classification'),tr('train'))
+    h5(tr('use',input),a(tr('eng',input),href='https://www.kaggle.com/team-ai/spam-text-message-classification'),tr('train',input))
   })
   
   output$select = renderUI({ 
-    h4(tr('try'))
+    h5(tr('try',input))
   })
   
 }

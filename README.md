@@ -24,7 +24,7 @@ tag为是否为垃圾信息的标签，message列为文本内容，ID为信息�
 
 想使用这个Shiny，你需要输入一段短信内容文本，并选择一个分类器，下方将返回该文本的分类结果。由于训练文本为英文，请输入英文文本。此外，考虑到用户的语言习惯，我加入了中英双语界面，可以点击上方的按钮切换。程序右侧提供了一些示例文本供用户尝试。你可以阅读并复制它们到左侧，看看程序的输出结果：
 
-![](https://i.loli.net/2019/12/25/lQ3mIj5iDNFzUMx.gif)
+![](https://i.loli.net/2020/02/13/GBvS5XDcuMhTx9W.gif)
 
 当然你也可以使用自己收集的英文信息文本拿来运行，考验一下机器学习对于人类语言的理解能力！
 
@@ -100,7 +100,7 @@ Column `tag` distinguishs classes of messages，`message` is text content，`ID`
 
 To use this shiny, you need to input a text message , then choose a classifier. The classification result will appear immediately in box below. Attention that you must input English message because our training data is English. Furthermore, to internationalize it, I developed multilingual (Chinese and English) interface. Users could click a button above to switch language mode. On the right panel, I provide some example text to try. You could read it and copy it to left and see output of the program.
 
-![](https://i.loli.net/2019/12/25/lQ3mIj5iDNFzUMx.gif)
+![](https://i.loli.net/2020/02/13/13K6jHmtB7geqsx.gif)
 
 You could also input text message collected by yourself and test how deeply could computers understand human language!
 

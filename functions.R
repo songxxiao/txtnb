@@ -1,3 +1,10 @@
+# function define
+translation = readRDS("./data/translation.rds")
+## translates text into current language
+tr = function(text,input){ 
+  sapply(text,function(s) translation[[s]][[input$language]], USE.NAMES=F)
+}
+
 ## predict new string's class using machine learning
 ## param @model a classification algorithm
 ## param @string a message string to predict if it is a spam
