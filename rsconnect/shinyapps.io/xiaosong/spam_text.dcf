@@ -5,9 +5,9 @@ account: xiaosong
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 1745878
-bundleId: 2770516
+bundleId: 2883154
 url: https://xiaosong.shinyapps.io/spam_text/
-when: 1580702687.75675
+when: 1584271443.99395
 asMultiple: FALSE
 asStatic: FALSE
-ignoredFiles: .gitattributes|LICENSE|README.md|SMS_spam.Rmd|translation.R
+ignoredFiles: .gitattributes|intro|LICENSE|README.html|README.md|rsconnect.txt|SMS_spam.Rmd|translation.R

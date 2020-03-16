@@ -5,8 +5,9 @@ account: xiaosong
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 1745875
-bundleId: 2768371
+bundleId: 2802749
 url: https://xiaosong.shinyapps.io/txtnb/
-when: 1580573991.98917
+when: 1581757109.88192
 asMultiple: FALSE
 asStatic: FALSE
+ignoredFiles: LICENSE|README.html|README.md|SMS_spam.Rmd|translation.R

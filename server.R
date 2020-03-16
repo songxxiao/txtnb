@@ -15,7 +15,6 @@ rforest = readRDS("./classifiers/rforest.rds")
 logit = readRDS("./classifiers/logit.rds")
 source('functions.R')
 
-
 shinyServer(
 function(input, output, session) {
 
@@ -28,8 +27,28 @@ function(input, output, session) {
     helpText(tr('support',input))
   })
   
-  output$pack= renderUI({
+  output$pack = renderUI({
     helpText(tr('package',input))
+  })
+  
+  output$intro = renderUI({
+    helpText(tr('intro',input))
+  })
+ 
+  output$instruc = renderUI({
+   helpText(tr('instruc',input))
+  })
+  
+  output$example = renderUI({
+    helpText(tr('example',input))
+  })
+  
+  output$intropage = renderUI({
+    h4(tr('intropage',input))
+  })
+  
+  output$instpage = renderUI({
+    h4(tr('instpage',input))
   })
   
   output$value =  renderText({
