@@ -4,6 +4,7 @@ library(shiny)
 
 shinyUI(
 fluidPage(
+  theme = "bootstrap.min.css",
   uiOutput("tit"),
   radioButtons(inputId = "language", 
                label = "Select an UI language/选择一种界面语言",

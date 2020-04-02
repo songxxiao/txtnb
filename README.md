@@ -74,6 +74,8 @@ runGitHub( "txtnb", "songxxiao")
 
 + 2020/1/27 加入中英双语功能
 
++ 2020/4/02 修改前端CSS主题
+
 ----
 # A text classification: Spam Message Dectection R Shiny App
 
@@ -148,3 +150,5 @@ This app is written by [Xiao Song](https://xsong.ltd/). This is my first Shiny A
 + 2020/1/15 Add 3 new algorithms.
 
 + 2020/1/27 Update multilingual mode.
+
++ 2020/4/02 Change UI css theme.
