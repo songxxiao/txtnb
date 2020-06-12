@@ -1,7 +1,7 @@
 
 # 短文本分类：垃圾信息判别 R Shiny App程序
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
 
 本程序的github地址：<https://github.com/songxxiao/txtnb>
