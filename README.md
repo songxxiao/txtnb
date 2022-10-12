@@ -1,4 +1,82 @@
 
+# A text classification: Spam Message Dectection R Shiny App
+
+github：<https://github.com/songxxiao/txtnb>
+
+## Introduction
+
+Text classification is a basic application of natural language processing and machine learning. Spam message dectection is an important task, which have some demand for training data. For example, training data must has tags that represent if a message is a spam or a ham. Tagging a dataset will cost a lot. However, it is easy to find tagged datasets. Our data is [downloaded from Kaggle](https://www.kaggle.com/team-ai/spam-text-message-classification), which contains 5567 messages:
+
+```
+#   tag   message                                                          ID
+# 1 ham   Go until jurong point, crazy.. Available only in bugis n gre~     1
+# 2 ham   Ok lar... Joking wif u oni...                                     2
+# 3 spam  Free entry in 2 a wkly comp to win FA Cup final tkts 21st Ma~     3
+# 4 ham   U dun say so early hor... U c already then say...                 4
+# 5 ham   Nah I don't think he goes to usf, he lives around here though     5
+# 6 spam  FreeMsg Hey there darling it's been 3 week's now and no word~     6
+```
+Column `tag` distinguishs classes of messages，`message` is text content，`ID` identifies different messages.
+
+## Shiny App
+
+[Shiny](https://shiny.rstudio.com/) is an interactive web app developed by RStudio, it could wrap your R code into a webpage, thus users who do not understand R code could use it. Even you have no web development skills, you could write shiny apps. Shiny Apps could be shared online because RStudio provide free service for users, and I publish it on [shinyapps.io](https://xiaosong.shinyapps.io/spam_text/).
+
+To use this shiny, you need to input a text message , then choose a classifier. The classification result will appear immediately in box below. Attention that you must input English message because our training data is English. Furthermore, to internationalize it, I developed multilingual (Chinese and English) interface. Users could click a button above to switch language mode. On the right panel, I provide some example text to try. You could read it and copy it to left and see output of the program.
+
+![](https://i.loli.net/2020/02/13/13K6jHmtB7geqsx.gif)
+
+You could also input text message collected by yourself and test how deeply could computers understand human language!
+
+## Files Description
+
+| File                     | Description                      |
+|----------------------------|---------------------------|
+| README.md                  | Introduction file          |
+| server.R                   | Shiny app source code           |
+| ui.R                       | Shiny app user interface code     |
+| SMS_spam.Rmd               | model training RMarkdown file |
+| classifiers/logit.rds      | Logistic Regression result save  |
+| classifiers/naiveBayes.rds | Naive Bayes result save     |
+| classifiers/rforest.rds    | Random Forest result save     |
+| classifiers/rtree.rds      | CART decision tree result save |
+| classifiers/svmc.rds       | Support vector machine result save |
+| data/train.rds             | training data columns name data|
+| data/translation.rds       | Chinese-English translation dictionary list |
+| rsconnect                  | Shiny deploy file         |
+
+My basic idea for designing this shiny is to save trained classifiers as `.rds` files. Once the shiny is run, `.rds` files will be loaded. New text will be converted to DTM and fitted by loaded classifiers. Then result will be known. [My blog](https://xsong.ltd/zh/sms/) records how I trained algorithms. To keep my program to be robust, I did not use `magrittr::%>%` to write program.
+
+## How to Download and Use it?
+
+First off, you must install packages below:
+
+```r
+install.packages('shiny')
+install.packages('e1071')
+install.packages('randomForest')
+install.packages('tm')
+install.packages('SnowballC')
+```
+After installing `shiny` package, run this:
+
+```r
+library(shiny)
+runGitHub( "txtnb", "songxxiao")
+```
+
+This app is written by [Xiao Song](https://xsong.ltd/). This is my first Shiny App.
+
+## Update Record
+
++ 2022/1/15 Add 3 new algorithms.
+
++ 2022/1/27 Update multilingual mode.
+
++ 2022/4/02 Change UI css theme.
+
+----
+
 # 短文本分类：垃圾信息判别 R Shiny App程序
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
@@ -73,86 +151,10 @@ runGitHub( "txtnb", "songxxiao")
 
 ## 更新记录
 
-+ 2020/1/15 从原来的2个分类器更新至5个
++ 2022/1/15 从原来的2个分类器更新至5个
 
-+ 2020/1/27 加入中英双语功能
++ 2022/1/27 加入中英双语功能
 
-+ 2020/4/02 修改前端CSS主题
++ 2022/4/02 修改前端CSS主题
 
 
-----
-# A text classification: Spam Message Dectection R Shiny App
-
-github：<https://github.com/songxxiao/txtnb>
-
-## Introduction
-
-Text classification is a basic application of natural language processing and machine learning. Spam message dectection is an important task, which have some demand for training data. For example, training data must has tags that represent if a message is a spam or a ham. Tagging a dataset will cost a lot. However, it is easy to find tagged datasets. Our data is [downloaded from Kaggle](https://www.kaggle.com/team-ai/spam-text-message-classification), which contains 5567 messages:
-
-```
-#   tag   message                                                          ID
-# 1 ham   Go until jurong point, crazy.. Available only in bugis n gre~     1
-# 2 ham   Ok lar... Joking wif u oni...                                     2
-# 3 spam  Free entry in 2 a wkly comp to win FA Cup final tkts 21st Ma~     3
-# 4 ham   U dun say so early hor... U c already then say...                 4
-# 5 ham   Nah I don't think he goes to usf, he lives around here though     5
-# 6 spam  FreeMsg Hey there darling it's been 3 week's now and no word~     6
-```
-Column `tag` distinguishs classes of messages，`message` is text content，`ID` identifies different messages.
-
-## Shiny App
-
-[Shiny](https://shiny.rstudio.com/) is an interactive web app developed by RStudio, it could wrap your R code into a webpage, thus users who do not understand R code could use it. Even you have no web development skills, you could write shiny apps. Shiny Apps could be shared online because RStudio provide free service for users, and I publish it on [shinyapps.io](https://xiaosong.shinyapps.io/spam_text/).
-
-To use this shiny, you need to input a text message , then choose a classifier. The classification result will appear immediately in box below. Attention that you must input English message because our training data is English. Furthermore, to internationalize it, I developed multilingual (Chinese and English) interface. Users could click a button above to switch language mode. On the right panel, I provide some example text to try. You could read it and copy it to left and see output of the program.
-
-![](https://i.loli.net/2020/02/13/13K6jHmtB7geqsx.gif)
-
-You could also input text message collected by yourself and test how deeply could computers understand human language!
-
-## Files Description
-
-| File                     | Description                      |
-|----------------------------|---------------------------|
-| README.md                  | Introduction file          |
-| server.R                   | Shiny app source code           |
-| ui.R                       | Shiny app user interface code     |
-| SMS_spam.Rmd               | model training RMarkdown file |
-| classifiers/logit.rds      | Logistic Regression result save  |
-| classifiers/naiveBayes.rds | Naive Bayes result save     |
-| classifiers/rforest.rds    | Random Forest result save     |
-| classifiers/rtree.rds      | CART decision tree result save |
-| classifiers/svmc.rds       | Support vector machine result save |
-| data/train.rds             | training data columns name data|
-| data/translation.rds       | Chinese-English translation dictionary list |
-| rsconnect                  | Shiny deploy file         |
-
-My basic idea for designing this shiny is to save trained classifiers as `.rds` files. Once the shiny is run, `.rds` files will be loaded. New text will be converted to DTM and fitted by loaded classifiers. Then result will be known. [My blog](https://xsong.ltd/zh/sms/) records how I trained algorithms. To keep my program to be robust, I did not use `magrittr::%>%` to write program.
-
-## How to Download and Use it?
-
-First off, you must install packages below:
-
-```r
-install.packages('shiny')
-install.packages('e1071')
-install.packages('randomForest')
-install.packages('tm')
-install.packages('SnowballC')
-```
-After installing `shiny` package, run this:
-
-```r
-library(shiny)
-runGitHub( "txtnb", "songxxiao")
-```
-
-This app is written by [Xiao Song](https://xsong.ltd/). This is my first Shiny App.
-
-## Update Record
-
-+ 2020/1/15 Add 3 new algorithms.
-
-+ 2020/1/27 Update multilingual mode.
-
-+ 2020/4/02 Change UI css theme.
